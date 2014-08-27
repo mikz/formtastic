@@ -111,6 +111,16 @@ module Formtastic
       rescue Formtastic::ActionClassFinder::NotFoundError
         raise Formtastic::UnknownActionError, "Unable to find action #{$!.message}"
       end
+
+      def custom_action_class_name(as)
+        ::ActiveSupport::Deprecation.warn("Overriding custom_input_class_name is deprecated in favour of :input_namespaces option and will be removed in the next version")
+        "#{as.to_s.camelize}Action"
+      end
+
+      def standard_action_class_name(as)
+        ::ActiveSupport::Deprecation.warn("Overriding standard_input_class_name is deprecated in favour of :input_namespaces option and will be removed in the next version")
+        "Formtastic::Actions::#{as.to_s.camelize}Action"
+      end
     end
   end
 end

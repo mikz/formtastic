@@ -31,10 +31,10 @@ module Formtastic
     configure :default_hint_class, 'inline-hints'
     configure :use_required_attribute, false
     configure :perform_browser_validations, false
-    configure :input_namespaces, [::Object, ::Formtastic::Inputs]
-    configure :input_class_finder, Formtastic::InputClassFinder
-    configure :action_namespaces, [::Object, ::Formtastic::Actions]
-    configure :action_class_finder, Formtastic::ActionClassFinder
+    configure :input_namespaces, nil # TODO: change it to [::Object, ::Formtastic::Inputs] in 4.0
+    configure :input_class_finder, Formtastic::DeprecatedInputClassFinder
+    configure :action_namespaces, nil # TODO: change it to  [::Object, ::Formtastic::Actions] in 4.0
+    configure :action_class_finder, Formtastic::DeprecatedActionClassFinder
 
     attr_reader :template
 

@@ -1,3 +1,5 @@
+require 'formtastic/basic_class_finder'
+
 module Formtastic
   # This class implements class resolution in a namespace chain. It
   # is used both by InputHelper and ActionHelper to look up custom
@@ -8,7 +10,7 @@ module Formtastic
   #   +Formtastic::Helpers::ActionHelper+
   # for details.
   #
-  class NamespacedClassFinder
+  class NamespacedClassFinder < BasicClassFinder
     attr_reader :namespaces #:nodoc:
 
     # @private
@@ -16,19 +18,8 @@ module Formtastic
     end
 
     def initialize(namespaces) #:nodoc:
-      @namespaces = namespaces.flatten
-      @cache = {}
-    end
-
-    # Looks up the given reference in the configured namespaces.
-    #
-    # Two finder methods are provided, one for development tries to
-    # reference the constant directly, triggering Rails' autoloading
-    # const_missing machinery; the second one instead for production
-    # checks with .const_defined before referencing the constant.
-    #
-    def find(as)
-      @cache[as] ||= resolve(as)
+      @namespaces = Array(namespaces).flatten
+      super()
     end
 
     def resolve(as)
@@ -41,16 +32,6 @@ module Formtastic
 
     def class_name(as)
       as.to_s.camelize
-    end
-
-    if defined?(Rails) && ::Rails.application && ::Rails.application.config.cache_classes
-      def finder(class_name) # :nodoc:
-        find_with_const_defined(class_name)
-      end
-    else
-      def finder(class_name) # :nodoc:
-        find_by_trying(class_name)
-      end
     end
 
     # Looks up the given class name in the configured namespaces in order,
